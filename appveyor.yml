@@ -1,0 +1,17 @@
+build: off
+test_script:
+  - set base_path=C:/msys64/usr/bin;C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32
+
+  - set PATH=C:/ruby24-x64/bin;%base_path% & ruby pacman_query.rb
+
+  - set PATH=C:/ruby21-x64/bin;%base_path% & ruby appveyor_info.rb
+
+  - set PATH=C:/ruby22-x64/bin;%base_path% & ruby appveyor_info.rb
+
+  - set PATH=C:/ruby23-x64/bin;%base_path% & ruby appveyor_info.rb
+
+  - set PATH=C:/ruby24-x64/bin;%base_path% & ruby appveyor_info.rb
+
+  - appveyor DownloadFile http://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:/ruby_trunk.7z
+  - 7z x C:/ruby_trunk.7z -oC:/ruby_trunk & C:/ruby_trunk/trunk_install.cmd
+  - set PATH=C:/ruby_trunk/bin;%base_path% & ruby appveyor_info.rb
