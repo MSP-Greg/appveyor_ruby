@@ -10,8 +10,8 @@ If you're interested in adding a ruby trunk build to your appveyor script, the f
 init:
   - set PATH=C:\ruby%ruby_version%\bin;C:\msys64\usr\bin;C:\Program Files\7-Zip;C:\Program Files\AppVeyor\BuildAgent;C:\Program Files\Git\cmd;C:\Windows\system32
   - if %ruby_version%==_trunk (
-        appveyor DownloadFile http://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:\ruby_trunk.7z &
-        7z x C:\ruby_trunk.7z -oC:\ruby_trunk & C:\ruby_trunk\trunk_install.cmd)
+        appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:\ruby_trunk.7z &
+        7z x C:\ruby_trunk.7z -oC:\ruby_trunk & C:\ruby_trunk\trunk_install.cmd )
 ```
 
 Add the following to your environment:
@@ -22,4 +22,4 @@ environment:
     - ruby_version: "_trunk"
 ```
 
-I expect to be updating the trunk file several times a week, and will update BinTray with it and the log files from the build & test.  Whatever is the most recent log file (`z_logs_YYYY_MM_DD_SNV.7z`) is the version of ruby contained in `ruby_trunk.7z`.  All code 7z files are signed.
+I expect to be updating the trunk file several times a week, and will update BinTray with it and the log files from the build & test.  Whatever is the most recent log file (`zlogs_trunk_YYYY_MM_DD_SNV.7z`) is the version of ruby contained in `ruby_trunk.7z`.  All code 7z files are signed using 77D8FA18.
