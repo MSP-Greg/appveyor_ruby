@@ -20,6 +20,8 @@ module VersInfo
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
         if OpenSSL.const_defined?(:OPENSSL_LIBRARY_VERSION)
           additional('OPENSSL_LIBRARY_VERSION', 0, 4) { OpenSSL::OPENSSL_LIBRARY_VERSION }
+        else
+          additional('OPENSSL_LIBRARY_VERSION', 0, 4) { "Not Defined" }
         end
         additional('DEFAULT_CONFIG_FILE    ', 0, 4) { OpenSSL::Config::DEFAULT_CONFIG_FILE }
       end
