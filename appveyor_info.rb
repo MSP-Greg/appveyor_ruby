@@ -1,7 +1,7 @@
 require "rbconfig"
 
 module VersInfo
-  @@col_wid = [28,15,15]
+  @@col_wid = [28,15,15,40]
   
   class << self
   
@@ -23,7 +23,10 @@ module VersInfo
         else
           additional('OPENSSL_LIBRARY_VERSION', 0, 4) { "Not Defined" }
         end
-        additional('DEFAULT_CONFIG_FILE    ', 0, 4) { OpenSSL::Config::DEFAULT_CONFIG_FILE }
+        puts
+        additional_file('OpenSSL::X509::DEFAULT_CERT_FILE'    , 3, 4) { OpenSSL::X509::DEFAULT_CERT_FILE }
+        additional_file('OpenSSL::X509::DEFAULT_CERT_DIR'     , 3, 4) { OpenSSL::X509::DEFAULT_CERT_DIR }
+        additional_file('OpenSSL::Config::DEFAULT_CONFIG_FILE', 3, 4) { OpenSSL::Config::DEFAULT_CONFIG_FILE }
       end
       puts
 
@@ -37,11 +40,13 @@ module VersInfo
       loads?('win32/registry', 'Win32::Registry')
       loads?('win32ole', 'WIN32OLE')
       
-      gem_list
-      
       puts "\n#{'-' * 45} ENV Info"
-      puts "OPENSSL_CONF  #{ENV['OPENSSL_CONF']}"
-      puts "SSL_CERT_FILE #{ENV['SSL_CERT_FILE']}"
+      puts "SSL_CERT_FILE #{(ENV['SSL_CERT_FILE'] || '').ljust(32)} #{ File.exist?(ENV['SSL_CERT_FILE'] || '') ? 'ok' : 'not found'}"
+      puts "SSL_CERT_DIR  #{(ENV['SSL_CERT_DIR']  || '').ljust(32) } #{ Dir.exist?(ENV['SSL_CERT_DIR']  || '') ? 'ok' : 'not found'}"
+      puts "OPENSSL_CONF  #{(ENV['OPENSSL_CONF']  || '').ljust(32) } #{File.exist?(ENV['OPENSSL_CONF']  || '') ? 'ok' : 'not found'}"
+
+      gem_list
+
       puts "\n#{'-' * 110}"
     end
 
@@ -67,10 +72,22 @@ module VersInfo
     end
     
     def additional(text, idx, indent = 0)
-      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}  #{yield}"
+      fn = yield
+      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}  #{fn}"
     rescue LoadError
     end
-    
+
+    def additional_file(text, idx, indent = 0)
+      fn = yield
+      if /\./ =~ File.basename(fn)
+        found = File.exist?(fn) ? 'ok' : 'not found'
+      else
+        found = Dir.exist?(fn) ? 'ok' : 'not found'
+      end
+      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}  #{fn.ljust(50)}  #{found}"
+    rescue LoadError
+    end
+
     def double(req, text1, text2, idx)
       require req
       val1, val2 = yield
