@@ -41,9 +41,10 @@ module VersInfo
       loads?('win32ole', 'WIN32OLE')
       
       puts "\n#{'-' * 45} ENV Info"
-      puts "SSL_CERT_FILE #{(ENV['SSL_CERT_FILE'] || '').ljust(32)} #{ File.exist?(ENV['SSL_CERT_FILE'] || '') ? 'ok' : 'not found'}"
-      puts "SSL_CERT_DIR  #{(ENV['SSL_CERT_DIR']  || '').ljust(32) } #{ Dir.exist?(ENV['SSL_CERT_DIR']  || '') ? 'ok' : 'not found'}"
-      puts "OPENSSL_CONF  #{(ENV['OPENSSL_CONF']  || '').ljust(32) } #{File.exist?(ENV['OPENSSL_CONF']  || '') ? 'ok' : 'not found'}"
+      puts "SSL_CERT_FILE #{env_file_exists 'SSL_CERT_FILE'}"
+
+      puts "SSL_CERT_DIR  #{env_file_exists 'SSL_CERT_DIR'}"
+      puts "OPENSSL_CONF  #{env_file_exists 'OPENSSL_CONF'}"
 
       gem_list
 
@@ -80,14 +81,26 @@ module VersInfo
     def additional_file(text, idx, indent = 0)
       fn = yield
       if /\./ =~ File.basename(fn)
-        found = File.exist?(fn) ? 'ok' : 'not found'
+        found = File.exist?(fn) ? File.mtime(fn).strftime('File Dated %F') : 'File Not Found!      '
       else
-        found = Dir.exist?(fn) ? 'ok' : 'not found'
+        found = Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '
       end
-      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}  #{fn.ljust(50)}  #{found}"
+      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}  #{found}  #{fn}"
     rescue LoadError
     end
 
+    def env_file_exists(env)
+      if fn = ENV[env]
+        if /\./ =~ File.basename(fn)
+          "#{ File.exist?(fn) ? "#{File.mtime(fn).strftime('File Dated %F')}" : 'File Not Found!      '}  #{fn}"
+        else
+          "#{ Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '}  #{fn}"
+        end
+      else
+        "none"
+      end
+    end
+    
     def double(req, text1, text2, idx)
       require req
       val1, val2 = yield
