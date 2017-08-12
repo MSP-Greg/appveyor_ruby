@@ -10,6 +10,10 @@ test_script:
 
   - set PATH=C:/ruby23-x64/bin;%base_path% & ruby appveyor_info.rb
 
+  - appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby2.3.4u.7z -FileName C:/ruby2.3.4u.7z
+  - 7z x C:/ruby2.3.4u.7z -oC:/ruby2.3.4u & C:/ruby2.3.4u/ruby2.3.4u_install.cmd
+  - set PATH=C:/ruby2.3.4u/bin;%base_path% & ruby appveyor_info.rb
+
   - set PATH=C:/ruby24-x64/bin;%base_path% & ruby appveyor_info.rb
 
   - appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby_trunk.7z -FileName C:/ruby_trunk.7z
