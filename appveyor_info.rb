@@ -23,6 +23,9 @@ module VersInfo
         else
           additional('OPENSSL_LIBRARY_VERSION', 0, 4) { "Not Defined" }
         end
+        additional('SSLContext::METHODS', 0, 4) {
+          OpenSSL::SSL::SSLContext::METHODS.reject { |e| /client|server/ =~ e }.sort.join(' ')
+        }
         puts
         additional_file('OpenSSL::X509::DEFAULT_CERT_FILE'    , 3, 4) { OpenSSL::X509::DEFAULT_CERT_FILE }
         additional_file('OpenSSL::X509::DEFAULT_CERT_DIR'     , 3, 4) { OpenSSL::X509::DEFAULT_CERT_DIR }
@@ -81,7 +84,7 @@ module VersInfo
     def additional_file(text, idx, indent = 0)
       fn = yield
       if /\./ =~ File.basename(fn)
-        found = File.exist?(fn) ? File.mtime(fn).strftime('File Dated %F') : 'File Not Found!      '
+        found = File.exist?(fn) ? File.mtime(fn).utc.strftime('File Dated %F') : 'File Not Found!      '
       else
         found = Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '
       end
@@ -92,7 +95,7 @@ module VersInfo
     def env_file_exists(env)
       if fn = ENV[env]
         if /\./ =~ File.basename(fn)
-          "#{ File.exist?(fn) ? "#{File.mtime(fn).strftime('File Dated %F')}" : 'File Not Found!      '}  #{fn}"
+          "#{ File.exist?(fn) ? "#{File.mtime(fn).utc.strftime('File Dated %F')}" : 'File Not Found!      '}  #{fn}"
         else
           "#{ Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '}  #{fn}"
         end
