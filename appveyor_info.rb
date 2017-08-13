@@ -12,9 +12,11 @@ module VersInfo
       gcc = RbConfig::CONFIG["CC_VERSION_MESSAGE"] ?
         RbConfig::CONFIG["CC_VERSION_MESSAGE"][/\A.+?\n/] : 'unknown'
       puts "gcc info: #{gcc}\n"
-      first('gdbm'    , 'GDBM::VERSION'   , 15)  { GDBM::VERSION    }
-      first('rubygems', 'Gem::VERSION'    , 15)  { Gem::VERSION     }
-      first('json'    , 'JSON::VERSION'   , 15)  { JSON::VERSION    }
+      first('rubygems'  , 'Gem::VERSION'  , 15)  { Gem::VERSION   }
+      puts
+      first('bigdecimal', 'BigDecimal.ver', 15)  { BigDecimal.ver }
+      first('gdbm'      , 'GDBM::VERSION' , 15)  { GDBM::VERSION  }
+      first('json'      , 'JSON::VERSION' , 15)  { JSON::VERSION  }
       puts
       if first('openssl', 'OpenSSL::VERSION', 0)    { OpenSSL::VERSION }
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
@@ -37,7 +39,7 @@ module VersInfo
       unless first('readline', 'Readline::VERSION (ext)', 0) { Readline::VERSION }
         first('rb-readline', 'Readline::VERSION (gem)'  , 0) { Readline::VERSION }
       end
-      first('zlib'    , 'Zlib::ZLIB_VERSION', 0)  { Zlib::ZLIB_VERSION }
+      double('zlib', 'Zlib::VERSION', 'ZLIB_VERSION', 0) { [Zlib::VERSION, Zlib::ZLIB_VERSION] }
       puts
       loads?('socket', 'Socket')
       loads?('win32/registry', 'Win32::Registry')
