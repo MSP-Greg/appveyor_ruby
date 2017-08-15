@@ -9,9 +9,10 @@ module VersInfo
       puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, '-')
       puts RUBY_DESCRIPTION
       puts
+      puts "Build Type/Info: #{ri2_vers}"
       gcc = RbConfig::CONFIG["CC_VERSION_MESSAGE"] ?
         RbConfig::CONFIG["CC_VERSION_MESSAGE"][/\A.+?\n/] : 'unknown'
-      puts "gcc info: #{gcc}\n"
+      puts "       gcc info: #{gcc}\n"
       first('rubygems'  , 'Gem::VERSION'  , 18)  { Gem::VERSION     }
       puts
       first('bigdecimal', 'BigDecimal.ver', 18)  { BigDecimal.ver   }
@@ -58,7 +59,18 @@ module VersInfo
     end
 
   private
-    
+
+    def ri2_vers
+      fn = "#{RbConfig::TOPDIR}/lib/ruby/site_ruby/#{RbConfig::CONFIG['ruby_version']}/ruby_installer/runtime/package_version.rb"
+      if File.exist?(fn)
+        s = File.read(fn)
+        "RubyInstaller2 vers #{s[/^ *PACKAGE_VERSION *= *['"]([^'"]+)/, 1].strip}  commit #{s[/^ *GIT_COMMIT *= *['"]([^'"]+)/, 1].strip}"
+      else
+        "RubyInstaller build?"
+      end
+    end
+  
+  
     def loads1?(req, str, idx)
       begin
         require req
