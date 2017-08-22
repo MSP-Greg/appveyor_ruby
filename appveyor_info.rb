@@ -17,7 +17,7 @@ module VersInfo
       puts
       first('bigdecimal', 'BigDecimal.ver', 18)  { BigDecimal.ver   }
       first('gdbm'      , 'GDBM::VERSION' , 18)  { GDBM::VERSION    }
-      first('json'      , 'JSON::VERSION' , 18)  { JSON::VERSION    }
+      first('json/ext'  , 'JSON::VERSION' , 18)  { JSON::VERSION    }
       puts
       if first('openssl', 'OpenSSL::VERSION', 0) { OpenSSL::VERSION }
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
@@ -42,9 +42,9 @@ module VersInfo
       puts
 
       double('psych', 'Psych::VERSION', 'LIBYAML_VERSION', 3, 1, 2) { [Psych::VERSION, Psych::LIBYAML_VERSION] }
-      unless first('readline', 'Readline::VERSION (ext)', 3) { Readline::VERSION }
-        first('rb-readline', 'Readline::VERSION (gem)'  , 3) { Readline::VERSION }
-      end
+      require 'readline'
+      @rl_type = (Readline.method(:line_buffer).source_location ? 'rb' : 'so')
+      first('readline', "Readline::VERSION (#{@rl_type})", 3) { Readline::VERSION }
       double('zlib', 'Zlib::VERSION', 'ZLIB_VERSION', 3, 1, 2) { [Zlib::VERSION, Zlib::ZLIB_VERSION] }
       puts
       puts "\n#{'-' * 56} Load Test"
