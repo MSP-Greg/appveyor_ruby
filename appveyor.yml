@@ -1,6 +1,6 @@
 build: off
 test_script:
-  - set base_path=C:/msys64/usr/bin;C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32
+  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32;;C:/Windows
 
   - set PATH=C:/ruby24-x64/bin;%base_path% & ruby pacman_query.rb
 
