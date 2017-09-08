@@ -26,9 +26,7 @@ module VersInfo
         else
           additional('OPENSSL_LIBRARY_VERSION', 0, 4) { "Not Defined" }
         end
-        additional('SSLContext::METHODS', 0, 4) {
-          OpenSSL::SSL::SSLContext::METHODS.reject { |e| /client|server/ =~ e }.sort.join(' ')
-        }
+        ssl_methods
         puts
         additional_file('X509::DEFAULT_CERT_FILE'    , 0, 4) { OpenSSL::X509::DEFAULT_CERT_FILE }
         additional_file('X509::DEFAULT_CERT_DIR'     , 0, 4) { OpenSSL::X509::DEFAULT_CERT_DIR }
@@ -181,6 +179,44 @@ module VersInfo
       strm_io = nil
       cmd = nil
     end
+
+    def ssl_methods
+      ssl = OpenSSL::SSL
+      if OpenSSL::VERSION <= '2.0.9'
+        additional('SSLContext::METHODS', 0, 4) {
+          ssl::SSLContext::METHODS.reject { |e| /client|server/ =~ e }.sort.join(' ')
+        }
+      else
+        additional('SSLContext versions', 0, 4) {
+          ctx = OpenSSL::SSL::SSLContext.new
+          if  ctx.respond_to? :min_version=
+            ssl_methods = []
+            all_ssl_meths = 
+            [ [ssl::SSL2_VERSION  , 'SSLv2'  ],
+              [ssl::SSL3_VERSION  , 'SSLv3'  ],
+              [ssl::TLS1_VERSION  , 'TLSv1'  ],
+              [ssl::TLS1_1_VERSION, 'TLSv1_1'],
+              [ssl::TLS1_2_VERSION, 'TLSv1_2']
+            ]
+            if defined? ssl::TLS1_3_VERSION
+              all_ssl_meths << [ssl::TLS1_3_VERSION, 'TLSv1_3']
+            end
+            all_ssl_meths.each { |m|
+              begin
+                ctx.min_version = m[0]
+                ctx.max_version = m[0]
+                ssl_methods << m[1]
+              rescue
+              end
+            }
+            ssl_methods.join(' ')
+          else
+            ''
+          end
+        }
+      end
+    end
+
   end
 end
 
