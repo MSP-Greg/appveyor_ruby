@@ -1,6 +1,6 @@
 build: off
 test_script:
-  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32;;C:/Windows
+  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32;C:/Windows
 
   - set PATH=C:/ruby24-x64/bin;C:/msys64/usr/bin;%base_path% & ruby pacman_query.rb
 
@@ -10,9 +10,9 @@ test_script:
 
   - set PATH=C:/ruby23-x64/bin;%base_path% & ruby appveyor_info.rb
 
-  - appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby2.3.4u.7z -FileName C:/ruby2.3.4u.7z
-  - 7z x C:/ruby2.3.4u.7z -oC:/ruby2.3.4u & C:/ruby2.3.4u/ruby2.3.4u_install.cmd
-  - set PATH=C:/ruby2.3.4u/bin;%base_path% & ruby appveyor_info.rb
+  - appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby23-ri2.7z -FileName C:/ruby23-ri2.7z
+  - 7z x C:/ruby23-ri2.7z -oC:/ruby23-ri2 & C:/ruby23-ri2/ruby23-ri2_install.cmd
+  - set PATH=C:/ruby23-ri2/bin;%base_path% & ruby appveyor_info.rb
 
   - set PATH=C:/ruby24-x64/bin;%base_path% & ruby appveyor_info.rb
 
