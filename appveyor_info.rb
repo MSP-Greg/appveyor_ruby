@@ -7,17 +7,19 @@ module VersInfo
   
     def run
       puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, '-')
+      puts
       puts RUBY_DESCRIPTION
       puts
       puts "Build Type/Info: #{ri2_vers}"
       gcc = RbConfig::CONFIG["CC_VERSION_MESSAGE"] ?
-        RbConfig::CONFIG["CC_VERSION_MESSAGE"][/\A.+?\n/] : 'unknown'
-      puts "       gcc info: #{gcc}\n"
-      first('rubygems'  , 'Gem::VERSION'  , 18)  { Gem::VERSION     }
+        RbConfig::CONFIG["CC_VERSION_MESSAGE"][/\A.+?\n/].strip : 'unknown'
+      puts "       gcc info: #{gcc}"
       puts
-      first('bigdecimal', 'BigDecimal.ver', 18)  { BigDecimal.ver   }
-      first('gdbm'      , 'GDBM::VERSION' , 18)  { GDBM::VERSION    }
-      first('json/ext'  , 'JSON::VERSION' , 18)  { JSON::VERSION    }
+      first('rubygems'  , 'Gem::VERSION'  , 2)  { Gem::VERSION     }
+      puts
+      first('bigdecimal', 'BigDecimal.ver', 2)  { BigDecimal.ver   }
+      first('gdbm'      , 'GDBM::VERSION' , 2)  { GDBM::VERSION    }
+      first('json/ext'  , 'JSON::VERSION' , 2)  { JSON::VERSION    }
       puts
       if first('openssl', 'OpenSSL::VERSION', 0) { OpenSSL::VERSION }
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
