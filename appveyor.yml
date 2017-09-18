@@ -6,7 +6,7 @@ test_script:
 
   - set PATH=C:/Ruby193/bin;%base_path% & ruby appveyor_info.rb
   
-  - set PATH=C:/ruby20-x64/bin;%base_path% & ruby appveyor_info.rb
+  - set PATH=C:/ruby200-x64/bin;%base_path% & ruby appveyor_info.rb
 
   - set PATH=C:/ruby21-x64/bin;%base_path% & ruby appveyor_info.rb
 
