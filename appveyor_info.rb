@@ -2,9 +2,9 @@ require "rbconfig"
 
 module VersInfo
   @@col_wid = [34, 14, 17, 26, 10, 16]
-  
+
   class << self
-  
+
     def run
       puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, '-')
       puts
@@ -37,7 +37,7 @@ module VersInfo
         additional_file("ENV['SSL_CERT_FILE']"       , 0, 4) { ENV['SSL_CERT_FILE'] }
         additional_file("ENV['SSL_CERT_DIR']"        , 0, 4) { ENV['SSL_CERT_DIR']  }
         additional_file("ENV['OPENSSL_CONF']"        , 0, 4) { ENV['OPENSSL_CONF']  }
-        
+
       end
       puts
 
@@ -49,7 +49,7 @@ module VersInfo
 
       if const_defined?(:Integer) &&  Integer.const_defined?(:GMP_VERSION)
         puts "#{'Integer::GMP_VERSION'.ljust(@@col_wid[3])}#{Integer::GMP_VERSION}"
-      elsif const_defined?(:Bignum) 
+      elsif const_defined?(:Bignum)
         if Bignum.const_defined?(:GMP_VERSION)
           puts "#{'Bignum::GMP_VERSION'.ljust( @@col_wid[3])}#{Bignum::GMP_VERSION}"
         else
@@ -63,7 +63,7 @@ module VersInfo
       loads2?('digest', 'Digest', 'win32ole'      , 'WIN32OLE'       , 4)
       loads2?('fiddle', 'Fiddle', 'zlib'          , 'Zlib'           , 4)
       loads1?('socket', 'Socket', 4)
-      
+
       gem_list
 
       puts "\n#{'-' * 110}"
@@ -80,8 +80,7 @@ module VersInfo
         "RubyInstaller build?"
       end
     end
-  
-  
+
     def loads1?(req, str, idx)
       begin
         require req
@@ -115,7 +114,7 @@ module VersInfo
       puts "#{text.ljust(col)}NOT FOUND!"
       false
     end
-    
+
     def additional(text, idx, indent = 0)
       fn = yield
       puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}#{fn}"
@@ -127,11 +126,15 @@ module VersInfo
       if fn.nil?
         found = 'No ENV key'
       elsif /\./ =~ File.basename(fn)
-        found = File.exist?(fn) ? File.mtime(fn).utc.strftime('File Dated %F') : 'File Not Found!      '
+        found = File.exist?(fn) ?
+          "#{File.mtime(fn).utc.strftime('File Dated %F').ljust(23)}#{fn}" :
+          "#{'File Not Found!'.ljust(23)}Unknown path or file"
       else
-        found = Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '
+        found = Dir.exist?(fn) ?
+          "#{'Dir  Exists'.ljust(23)}#{fn}" :
+          "#{'Dir  Not Found!'.ljust(23)}Unknown path or file"
       end
-      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}#{found}  #{fn}"
+      puts "#{(' ' * indent + text).ljust(@@col_wid[idx])}#{found}"
     rescue LoadError
     end
 
@@ -140,13 +143,13 @@ module VersInfo
         if /\./ =~ File.basename(fn)
           "#{ File.exist?(fn) ? "#{File.mtime(fn).utc.strftime('File Dated %F')}" : 'File Not Found!      '}  #{fn}"
         else
-          "#{ Dir.exist?(fn) ? 'Dir  Exists          ' : 'Dir  Not Found!      '}  #{fn}"
+          "#{(Dir.exist?(fn) ? 'Dir  Exists' : 'Dir  Not Found!').ljust(23)}  #{fn}"
         end
       else
         "none"
       end
     end
-    
+
     def double(req, text1, text2, idx1, idx2, idx3)
       require req
       val1, val2 = yield
@@ -171,10 +174,10 @@ module VersInfo
       ary_bundled.reject! { |i| /^[a-z]/ !~ i }
       ary_default = ary_bundled.select { |i| /\(default:/ =~ i }
       ary_bundled.reject! { |i| /\(default:/ =~ i }
-      
-      ary_default.map! { |i| i.gsub(/\(default: |\)/, '') } 
-      ary_bundled.map! { |i| i.gsub(/[()]/, '') } 
-      
+
+      ary_default.map! { |i| i.gsub(/\(default: |\)/, '') }
+      ary_bundled.map! { |i| i.gsub(/[()]/, '') }
+
       max_rows = [ary_default.length || 0, ary_bundled.length || 0].max
       (0..(max_rows-1)).each { |i|
         dflt  = ary_default[i] ? ary_default[i].split(" ") : ["", ""]
@@ -204,7 +207,7 @@ module VersInfo
           ctx = OpenSSL::SSL::SSLContext.new
           if  ctx.respond_to? :min_version=
             ssl_methods = []
-            all_ssl_meths = 
+            all_ssl_meths =
             [ [ssl::SSL2_VERSION  , 'SSLv2'  ],
               [ssl::SSL3_VERSION  , 'SSLv3'  ],
               [ssl::TLS1_VERSION  , 'TLSv1'  ],
