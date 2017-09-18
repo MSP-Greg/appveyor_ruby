@@ -46,7 +46,11 @@ module VersInfo
       @rl_type = (Readline.method(:line_buffer).source_location ? 'rb' : 'so')
       first('readline', "Readline::VERSION (#{@rl_type})", 3) { Readline::VERSION }
       double('zlib', 'Zlib::VERSION', 'ZLIB_VERSION', 3, 1, 2) { [Zlib::VERSION, Zlib::ZLIB_VERSION] }
-      puts
+      puts ( RUBY_VERSION > '2.4' ?
+          "#{'Integer::GMP_VERSION'.ljust(@@col_wid[3])}#{Integer::GMP_VERSION}" :
+          "#{'Bignum::GMP_VERSION'.ljust(@@col_wid[3])}#{Bignum::GMP_VERSION}" )
+
+          puts
       puts "\n#{'-' * 56} Load Test"
       loads2?('dbm'   , 'DBM'   , 'win32/registry', 'Win32::Registry', 4)
       loads2?('digest', 'Digest', 'win32ole'      , 'WIN32OLE'       , 4)
