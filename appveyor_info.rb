@@ -21,7 +21,9 @@ module VersInfo
       first('gdbm'      , 'GDBM::VERSION' , 2)  { GDBM::VERSION    }
       first('json/ext'  , 'JSON::VERSION' , 2)  { JSON::VERSION    }
       puts
+
       if first('openssl', 'OpenSSL::VERSION', 0) { OpenSSL::VERSION }
+        additional('SSL Verify'             , 0, 4) { ssl_verify }
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
         if OpenSSL.const_defined?(:OPENSSL_LIBRARY_VERSION)
           additional('OPENSSL_LIBRARY_VERSION', 0, 4) { OpenSSL::OPENSSL_LIBRARY_VERSION }
@@ -37,7 +39,6 @@ module VersInfo
         additional_file("ENV['SSL_CERT_FILE']"       , 0, 4) { ENV['SSL_CERT_FILE'] }
         additional_file("ENV['SSL_CERT_DIR']"        , 0, 4) { ENV['SSL_CERT_DIR']  }
         additional_file("ENV['OPENSSL_CONF']"        , 0, 4) { ENV['OPENSSL_CONF']  }
-
       end
       puts
 
@@ -231,6 +232,17 @@ module VersInfo
           end
         }
       end
+    end
+
+    def ssl_verify
+      require 'net/http'
+      uri = URI.parse('https://sourceware.org/pub/libffi/')
+      Net::HTTP.start(uri.host, uri.port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_PEER) { |https|
+        req = Net::HTTP::Get.new uri
+      }
+      "Success"
+    rescue OpenSSL::SSL::SSLError => e
+      "*** FAILURE ***"
     end
 
   end
