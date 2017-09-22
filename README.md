@@ -1,6 +1,6 @@
 This repo contains an Appveyor script and two ruby script files.  Its only purpose is to report information about the Ruby builds on Appveyor from 2.1 forward.
 
-The most recent build is at [ci.appveyor.com/project/MSP-Greg/appveyor_ruby](https://ci.appveyor.com/project/MSP-Greg/appveyor_ruby).  The top of the Appveyor log shows the installed MSYS2/MinGW packages, after that is information on Ruby 2.1 thru 2.4, and trunk.
+The most recent build is at [ci.appveyor.com/project/MSP-Greg/appveyor-ruby](https://ci.appveyor.com/project/MSP-Greg/appveyor-ruby).  The top of the Appveyor log shows the installed MSYS2/MinGW packages, after that is information on Ruby 2.1 thru 2.4, and trunk.
 
 The trunk build is my build (available at [BinTray](https://dl.bintray.com/msp-greg/ruby_windows/)), along with three MinGW packages, one of which is the current OpenSSL release.
 
