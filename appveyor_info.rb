@@ -57,8 +57,6 @@ module VersInfo
           puts "#{'Bignum::GMP_VERSION'.ljust( @@col_wid[3])}Unknown"
         end
       end
-
-      puts
       puts "\n#{'-' * 56} Load Test"
       loads2?('dbm'   , 'DBM'   , 'win32/registry', 'Win32::Registry', 4)
       loads2?('digest', 'Digest', 'win32ole'      , 'WIN32OLE'       , 4)
@@ -236,7 +234,8 @@ module VersInfo
 
     def ssl_verify
       require 'net/http'
-      uri = URI.parse('https://sourceware.org/pub/libffi/')
+      #uri = URI.parse('https://sourceware.org/pub/libffi/')
+      uri = URI.parse('https://raw.githubusercontent.com/gcc-mirror/gcc/master/config.guess')
       Net::HTTP.start(uri.host, uri.port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_PEER) { |https|
         req = Net::HTTP::Get.new uri
       }
