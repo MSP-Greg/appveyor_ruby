@@ -1,5 +1,5 @@
 puts
-puts " #{Time.now.getutc}".rjust(110, '-')
+puts " #{Time.now.getutc}".rjust(110, '—')
 
 ary = `bash -lc "pacman -Q"`
 
@@ -16,7 +16,7 @@ hsh[:x64]    = [] unless hsh[:x64]
 hsh[:msys2]  = [] unless hsh[:msys2]
 
 unless hsh[:i686].empty? && hsh[:x64].empty?
-  puts "\n#{'---- mingw-w64-x86_64 Packages ----'.ljust(59)} ---- mingw-w64-i686 Packages ----"
+  puts "\n#{'———— mingw-w64-x86_64 Packages ————'.ljust(59)} ———— mingw-w64-i686 Packages ————"
   max_len = [hsh[:i686].length, hsh[:x64].length].max - 1
   x, i = 0,0
   0.upto(max_len) { |j|
@@ -39,7 +39,7 @@ unless hsh[:i686].empty? && hsh[:x64].empty?
 end
 
 unless hsh[:msys2].empty?
-  puts "\n#{'---- MSYS2 Packages ----'.ljust(59)} ---- MSYS2 Packages ----"
+  puts "\n#{'———— MSYS2 Packages ————'.ljust(59)} ———— MSYS2 Packages ————"
   half = hsh[:msys2].length/2.ceil
   0.upto(half -1) { |i|
     puts "#{(hsh[:msys2][i] || '').ljust(59)} #{hsh[:msys2][i + half] || ''}"
