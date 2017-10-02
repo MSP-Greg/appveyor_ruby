@@ -2,17 +2,19 @@ require "rbconfig"
 
 module VersInfo
   @@col_wid = [34, 14, 17, 26, 10, 16]
-
+  
+  @@dash = RUBY_VERSION < "2.0" ? "-" : "—"
+  
   class << self
 
     def run
       # Give AV build a title that means something
       if /trunk/ =~ RUBY_DESCRIPTION && Dir.exist?('C:/Users/appveyor') && Dir.exist?('C:/Program Files/AppVeyor/BuildAgent')
         title = "#{Time.now.utc.strftime('%F %R UTC')}   #{RUBY_DESCRIPTION[/\([^\)]+\)/]}"
-        `appveyor UpdateBuild -Message \"#{title}\"`        
+        `appveyor UpdateBuild -Message \"#{title}\"`
       end
 
-      puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, '—')
+      puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, @@dash)
       puts
       puts RUBY_DESCRIPTION
       puts
@@ -63,7 +65,7 @@ module VersInfo
           puts "#{'Bignum::GMP_VERSION'.ljust( @@col_wid[3])}Unknown"
         end
       end
-      puts "\n#{'—' * 56} Load Test"
+      puts "\n#{@@dash * 56} Load Test"
       loads2?('dbm'   , 'DBM'   , 'win32/registry', 'Win32::Registry', 4)
       loads2?('digest', 'Digest', 'win32ole'      , 'WIN32OLE'       , 4)
       loads2?('fiddle', 'Fiddle', 'zlib'          , 'Zlib'           , 4)
@@ -175,7 +177,7 @@ module VersInfo
       ret = sio_out.string
       cmd.ui = orig_ui
       ary_bundled = ret.split(/\r*\n/)
-      puts "\n#{"—" * 12} #{'Default Gems —————'.ljust(30)} #{"—" * 12} Bundled Gems ————"
+      puts "\n#{@@dash * 12} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 12} Bundled Gems #{@@dash * 4}"
       ary_bundled.reject! { |i| /^[a-z]/ !~ i }
       ary_default = ary_bundled.select { |i| /\(default:/ =~ i }
       ary_bundled.reject! { |i| /\(default:/ =~ i }
