@@ -73,7 +73,7 @@ module VersInfo
 
       gem_list
 
-      puts "\n#{'—' * 110}"
+      puts "\n#{@@dash * 110}"
     end
 
   private
