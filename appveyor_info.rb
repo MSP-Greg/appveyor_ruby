@@ -2,12 +2,9 @@ require "rbconfig"
 
 module VersInfo
   @@col_wid = [34, 14, 17, 26, 10, 16]
-  
-  puts "—".codepoints
-  puts "-".codepoints
 
   @@dash = (RUBY_VERSION < "2.0" ? 45 : 8212).chr
-  
+
   class << self
 
     def run
