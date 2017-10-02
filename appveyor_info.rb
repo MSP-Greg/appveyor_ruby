@@ -3,7 +3,7 @@ require "rbconfig"
 module VersInfo
   @@col_wid = [34, 14, 17, 26, 10, 16]
 
-  @@dash = (RUBY_VERSION < "2.0" ? 45 : 8212).chr
+  @@dash = (RUBY_VERSION < "2.0" ? 45 : 8212).chr(Encoding::UTF_8)
 
   class << self
 
