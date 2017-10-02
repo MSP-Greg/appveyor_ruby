@@ -66,13 +66,12 @@ module VersInfo
         end
       end
       puts "\n#{@@dash * 56} Load Test"
-      loads2?('dbm'   , 'DBM'   , 'win32/registry', 'Win32::Registry', 4)
-      loads2?('digest', 'Digest', 'win32ole'      , 'WIN32OLE'       , 4)
-      loads2?('fiddle', 'Fiddle', 'zlib'          , 'Zlib'           , 4)
-      loads1?('socket', 'Socket', 4)
+      loads2?('dbm'     , 'DBM'     , 'socket'        , 'Socket'         , 4)
+      loads2?('digest'  , 'Digest'  , 'win32/registry', 'Win32::Registry', 4)
+      loads2?('fiddle'  , 'Fiddle'  , 'win32ole'      , 'WIN32OLE'       , 4)
+      loads1?('zlib'    , 'Zlib', 4, chk_rake(4))
 
       gem_list
-
       puts "\n#{@@dash * 110}"
     end
 
@@ -88,12 +87,35 @@ module VersInfo
       end
     end
 
-    def loads1?(req, str, idx)
+    def chk_rake(idx)
+      require 'open3'
+      ret = String.new
+      Open3.popen3("rake -V") {|stdin, stdout, stderr, wait_thr|
+        ret = stdout.read.strip
+      }
+      if /\d+\.\d+\.\d+/ =~ ret
+        "#{'Rake CLI'.ljust(@@col_wid[idx])}  Ok".ljust(@@col_wid[0])
+      else
+        "#{'Rake CLI'.ljust(@@col_wid[idx])}  Does not load!".ljust(@@col_wid[0])
+      end
+    rescue
+      "#{'Rake CLI'.ljust(@@col_wid[idx])}  Does not load!".ljust(@@col_wid[0])
+    end
+    
+    def loads1?(req, str, idx, pref = nil)
       begin
         require req
-        puts "#{str.ljust(@@col_wid[idx])}  Ok"
+        if pref
+          puts "#{pref}#{str.ljust(@@col_wid[idx+1])}  Ok"
+        else
+          puts "#{str.ljust(@@col_wid[idx])}  Ok"
+        end
       rescue LoadError
-        puts "#{str.ljust(@@col_wid[idx])}  Does not load!"
+        if pref
+          puts "#{pref}#{str.ljust(@@col_wid[idx]+1)}  Does not load!"
+        else
+          puts "#{str.ljust(@@col_wid[idx])}  Does not load!"
+        end
       end
     end
 
