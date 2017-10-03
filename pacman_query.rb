@@ -45,5 +45,5 @@ unless hsh[:msys2].empty?
     puts "#{(hsh[:msys2][i] || '').ljust(59)} #{hsh[:msys2][i + half] || ''}"
   }
 end
-puts
+puts "\n#{'—' * 110}"
 exit 0
