@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# Copyright (C) 2017 MSP-Greg
+
 puts
 puts " #{Time.now.getutc}".rjust(110, '—')
 
