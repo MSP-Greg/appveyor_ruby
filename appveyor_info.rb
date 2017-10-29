@@ -204,22 +204,22 @@ module VersInfo
       ret = sio_out.string
       cmd.ui = orig_ui
       ary_bundled = ret.split(/\r*\n/)
-      puts "\n#{@@dash * 12} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 12} Bundled Gems #{@@dash * 4}"
+      puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
       ary_bundled.reject! { |i| /^[a-z]/ !~ i }
-      ary_default = ary_bundled.select { |i| /\(default:/ =~ i }
-      ary_bundled.reject! { |i| /\(default:/ =~ i }
+      ary_default = ary_bundled.select { |i| /default: / =~ i }
+      ary_bundled.reject! { |i| /default: / =~ i }
 
-      ary_default.map! { |i| i.gsub(/\(default: |\)/, '') }
-      ary_bundled.map! { |i| i.gsub(/[()]/, '') }
+      ary_default.map! { |i| i.gsub(/\)|default: /, '') }
+      ary_bundled.map! { |i| i.gsub(/\)/, '') }
 
       max_rows = [ary_default.length || 0, ary_bundled.length || 0].max
       (0..(max_rows-1)).each { |i|
-        dflt  = ary_default[i] ? ary_default[i].split(" ") : ["", ""]
-        bndl  = ary_bundled[i] ? ary_bundled[i].split(" ") : nil
+        dflt  = ary_default[i] ? ary_default[i].split(" (") : ["", ""]
+        bndl  = ary_bundled[i] ? ary_bundled[i].split(" (") : nil
         if bndl
-          puts "#{dflt[1].rjust(12)} #{dflt[0].ljust(30)} #{bndl[1].rjust(12)} #{bndl[0]}"
+          puts "#{dflt[1].rjust(18)} #{dflt[0].ljust(30)} #{bndl[1].rjust(18)} #{bndl[0]}"
         else
-          puts "#{dflt[1].rjust(12)} #{dflt[0]}"
+          puts "#{dflt[1].rjust(18)} #{dflt[0]}"
         end
       }
     ensure
