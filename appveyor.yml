@@ -2,7 +2,7 @@ build: off
 deploy: off
 
 test_script:
-  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Program Files (x86)/GNU/GnuPG/pub;C:/Windows/system32;C:/Windows
+  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Windows/system32;C:/Windows;"C:/Program Files (x86)/GNU/GnuPG/pub"
 
   - set PATH=C:/ruby24-x64/bin;C:/msys64/usr/bin;%base_path% & ruby pacman_query.rb
 
@@ -21,6 +21,8 @@ test_script:
   - set PATH=C:/ruby23-ri2/bin;%base_path%  & ruby appveyor_info.rb
 
   - set PATH=C:/ruby24-x64/bin;%base_path%  & ruby appveyor_info.rb
+
+  - set PATH=C:/ruby25-x64/bin;%base_path%  & ruby appveyor_info.rb
 
   - appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:/ruby_trunk.7z
   - 7z x C:/ruby_trunk.7z -oC:/ruby_trunk
