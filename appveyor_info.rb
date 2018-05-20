@@ -94,7 +94,7 @@ module VersInfo
 
     def chk_rake(idx)
       require 'open3'
-      ret = String.new
+      ret = ''.dup
       Open3.popen3("rake -V") {|stdin, stdout, stderr, wait_thr|
         ret = stdout.read.strip
       }
@@ -201,9 +201,8 @@ module VersInfo
       orig_ui = cmd.ui
       cmd.ui = strm_io
       cmd.execute
-      ret = sio_out.string
+      ary_bundled = sio_out.string.split(/\r*\n/)
       cmd.ui = orig_ui
-      ary_bundled = ret.split(/\r*\n/)
       puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
       ary_bundled.reject! { |i| /^[a-z]/ !~ i }
       ary_default = ary_bundled.select { |i| /default:/ =~ i }
