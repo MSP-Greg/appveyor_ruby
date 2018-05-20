@@ -206,8 +206,8 @@ module VersInfo
       ary_bundled = ret.split(/\r*\n/)
       puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
       ary_bundled.reject! { |i| /^[a-z]/ !~ i }
-      ary_default = ary_bundled.select { |i| /default: / =~ i }
-      ary_bundled.reject! { |i| /default: / =~ i }
+      ary_default = ary_bundled.select { |i| /default:/ =~ i }
+      ary_bundled.reject! { |i| /default:/ =~ i }
 
       ary_default.map! { |i| i.gsub(/\)|default: /, '') }
       ary_bundled.map! { |i| i.gsub(/\)/, '') }
