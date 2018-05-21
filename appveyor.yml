@@ -4,26 +4,22 @@ deploy: off
 test_script:
   - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Windows/system32;C:/Windows;"C:/Program Files (x86)/GNU/GnuPG/pub"
 
-  - set PATH=C:/ruby24-x64/bin;C:/msys64/usr/bin;%base_path% & ruby pacman_query.rb
+  - set PATH=C:/Ruby25-x64/bin;C:/msys64/usr/bin;%base_path% & ruby pacman_query.rb
 
-  - set PATH=C:/Ruby193/bin;%base_path% & ruby -Eutf-8:utf-8 appveyor_info.rb
+  - set PATH=C:/Ruby193/bin;%base_path% & Ruby -Eutf-8:utf-8 appveyor_info.rb
   
-  - set PATH=C:/ruby200-x64/bin;%base_path% & ruby appveyor_info.rb
+  - set PATH=C:/Ruby200-x64/bin;%base_path% & ruby appveyor_info.rb
 
-  - set PATH=C:/ruby21-x64/bin;%base_path%  & ruby appveyor_info.rb
+  - set PATH=C:/Ruby21-x64/bin;%base_path%  & ruby appveyor_info.rb
 
-  - set PATH=C:/ruby22-x64/bin;%base_path%  & ruby appveyor_info.rb
+  - set PATH=C:/Ruby22-x64/bin;%base_path%  & ruby appveyor_info.rb
 
-  - set PATH=C:/ruby23-x64/bin;%base_path%  & ruby appveyor_info.rb
+  - set PATH=C:/Ruby23-x64/bin;%base_path%  & ruby appveyor_info.rb
 
-  - appveyor DownloadFile https://dl.bintray.com/msp-greg/ruby_windows/ruby23-ri2.7z -FileName C:/ruby23-ri2.7z
-  - 7z x C:/ruby23-ri2.7z -oC:/ruby23-ri2
-  - set PATH=C:/ruby23-ri2/bin;%base_path%  & ruby appveyor_info.rb
+  - set PATH=C:/Ruby24-x64/bin;%base_path%  & ruby appveyor_info.rb
 
-  - set PATH=C:/ruby24-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - set PATH=C:/ruby25-x64/bin;%base_path%  & ruby appveyor_info.rb
+  - set PATH=C:/Ruby25-x64/bin;%base_path%  & ruby appveyor_info.rb
 
   - appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:/ruby_trunk.7z
-  - 7z x C:/ruby_trunk.7z -oC:/ruby_trunk
-  - set PATH=C:/ruby_trunk/bin;%base_path%  & ruby appveyor_info.rb
+  - 7z x C:/ruby_trunk.7z -oC:/Ruby_trunk
+  - set PATH=C:/Ruby_trunk/bin;%base_path%  & ruby appveyor_info.rb
