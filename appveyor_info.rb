@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# encoding: UTF-8
 
 # Copyright (C) 2017 MSP-Greg
 
@@ -7,7 +8,14 @@ require "rbconfig" unless defined? RbConfig
 module VersInfo
   @@col_wid = [34, 14, 17, 26, 10, 16]
 
-  @@dash = 8212.chr(Encoding::UTF_8)
+  case ARGV[0]
+  when 'utf-8'
+    @@dash = "\u2015".dup.force_encoding 'utf-8'
+  when 'Windows-1252'
+    @@dash = 151.chr
+  else
+    @@dash = "\u2015".dup.force_encoding 'utf-8'
+  end
 
   class << self
 
@@ -18,8 +26,6 @@ module VersInfo
         `appveyor UpdateBuild -Message \"#{title}\"`
       end
 
-      puts " #{Time.now.getutc}     Appveyor Ruby #{RUBY_VERSION}".rjust(110, @@dash)
-      puts
       puts RUBY_DESCRIPTION
       puts
       puts "Build Type/Info: #{ri2_vers}"
@@ -77,7 +83,6 @@ module VersInfo
       loads1?('zlib'    , 'Zlib', 4, chk_rake(4))
 
       gem_list
-      puts "\n#{@@dash * 110}"
     end
 
   private
@@ -106,7 +111,7 @@ module VersInfo
     rescue
       "#{'Rake CLI'.ljust(@@col_wid[idx])}  Does not load!".ljust(@@col_wid[0])
     end
-    
+
     def loads1?(req, str, idx, pref = nil)
       begin
         require req
@@ -201,20 +206,29 @@ module VersInfo
       orig_ui = cmd.ui
       cmd.ui = strm_io
       cmd.execute
-      ary_bundled = sio_out.string.split(/\r*\n/)
+      ary = sio_out.string.split(/\r*\n/)
       cmd.ui = orig_ui
-      puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
-      ary_bundled.reject! { |i| /^[a-z]/ !~ i }
-      ary_default = ary_bundled.select { |i| /default:/ =~ i }
-      ary_bundled.reject! { |i| /default:/ =~ i }
 
-      ary_default.map! { |i| i.gsub(/\)|default: /, '') }
-      ary_bundled.map! { |i| i.gsub(/\)/, '') }
+      ary_bundled = []
+      ary_default = []
+
+      ary.each { |s|
+        gem_name = s[/\A[^ ]+/]
+        s.scan(/(default: |\(|, )(\d+\.\d+\.\d+[^,)]*)/) { |type, vers|
+          if type == 'default: '
+            ary_default << [gem_name, vers]
+          else
+            ary_bundled << [gem_name, vers]
+          end
+        }
+      }
+
+      puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
 
       max_rows = [ary_default.length || 0, ary_bundled.length || 0].max
       (0..(max_rows-1)).each { |i|
-        dflt  = ary_default[i] ? ary_default[i].split(" (") : ["", ""]
-        bndl  = ary_bundled[i] ? ary_bundled[i].split(" (") : nil
+        dflt  = ary_default[i] ? ary_default[i] : ["", ""]
+        bndl  = ary_bundled[i] ? ary_bundled[i] : nil
         if bndl
           puts "#{dflt[1].rjust(18)} #{dflt[0].ljust(30)} #{bndl[1].rjust(18)} #{bndl[0]}"
         else

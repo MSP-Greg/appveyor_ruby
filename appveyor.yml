@@ -2,24 +2,4 @@ build: off
 deploy: off
 
 test_script:
-  - set base_path=C:/Program Files/7-Zip;C:/Program Files/AppVeyor/BuildAgent;C:/Program Files/Git/cmd;C:/Windows/system32;C:/Windows;"C:/Program Files (x86)/GNU/GnuPG/pub"
-
-  - set PATH=C:/Ruby25-x64/bin;C:/msys64/usr/bin;%base_path% & ruby pacman_query.rb
-
-  - set PATH=C:/Ruby193/bin;%base_path% & Ruby -Eutf-8:utf-8 appveyor_info.rb
-  
-  - set PATH=C:/Ruby200-x64/bin;%base_path% & ruby appveyor_info.rb
-
-  - set PATH=C:/Ruby21-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - set PATH=C:/Ruby22-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - set PATH=C:/Ruby23-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - set PATH=C:/Ruby24-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - set PATH=C:/Ruby25-x64/bin;%base_path%  & ruby appveyor_info.rb
-
-  - appveyor DownloadFile https://ci.appveyor.com/api/projects/MSP-Greg/ruby-loco/artifacts/ruby_trunk.7z -FileName C:/ruby_trunk.7z
-  - 7z x C:/ruby_trunk.7z -oC:/Ruby_trunk
-  - set PATH=C:/Ruby_trunk/bin;%base_path%  & ruby appveyor_info.rb
+  - ps: .\ruby_loop.ps1
