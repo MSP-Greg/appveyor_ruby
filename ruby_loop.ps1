@@ -33,8 +33,8 @@ ruby.exe pacman_query.rb $enc
 
 Write-Host "`n$($dash * 107)" -ForegroundColor $fc
 
-foreach ($suf in $sufs) {
-  foreach ($ruby in $rubies) {
+foreach ($ruby in $rubies) {
+  foreach ($suf in $sufs) {
     if ($ruby -ne '_trunk') {
       if( !( Test-Path -Path $dir_ruby$ruby$suf ) ) { continue }
       $ruby_vers = $ruby.Substring(0,1) + '.' + $ruby.Substring(1,1) + '.0'
