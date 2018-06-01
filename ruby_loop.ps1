@@ -62,4 +62,7 @@ foreach ($ruby in $rubies) {
   }
 }
 
+Write-Host "`n$($dash * 8) Encoding $($dash * 8)" -ForegroundColor $fc
+Write-Host "PS Console  $enc"
+iex "ruby.exe -e `"['external','filesystem','internal','locale'].each { |e| puts e.ljust(12) + Encoding.find(e).to_s }`""
 Write-Host ''
