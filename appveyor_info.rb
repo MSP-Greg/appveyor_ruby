@@ -288,7 +288,6 @@ module VersInfo
 
     def ssl_verify
       require 'net/http'
-      #uri = URI.parse('https://sourceware.org/pub/libffi/')
       uri = URI.parse('https://raw.githubusercontent.com/gcc-mirror/gcc/master/config.guess')
       Net::HTTP.start(uri.host, uri.port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_PEER) { |https|
         req = Net::HTTP::Get.new uri
@@ -299,7 +298,11 @@ module VersInfo
     end
 
     def highlight(str)
-      puts "#{YELLOW}#{str}#{RESET}"
+      if RUBY_VERSION >= '2.0' || ENV.key?('APPVEYOR') 
+        puts "#{YELLOW}#{str}#{RESET}"
+      else
+        puts str
+      end
     end
     
   end

@@ -10,11 +10,12 @@ if ($env:APPVEYOR) {
   New-Variable -Name fc        -Option ReadOnly, AllScope -Scope Script -Value 'Yellow'
 
   New-Variable -Name enc       -Option AllScope -Scope Script
-  $enc = [Console]::OutputEncoding.HeaderName
-  
+ 
 } else {
   . .\local_paths.ps1
 }
+
+$enc = [Console]::OutputEncoding.HeaderName
 
 New-Variable -Name dash -Option ReadOnly, AllScope -Scope Script -Value "$([char]0x2015)"
 
@@ -23,7 +24,8 @@ New-Variable -Name dash -Option ReadOnly, AllScope -Scope Script -Value "$([char
 
 $dt = $(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss UTC")
 
-Write-Host "`n$($dash * 67) $dt  MSYS2 / MinGW" -ForegroundColor $fc
+Write-Host ""
+Write-Host " $dt  MSYS2 / MinGW".PadLeft(103, $dash) -ForegroundColor $fc
 
 # Set Path to Ruby 25 64 & MSYS Info
 $env:path  = $dir_ruby + "25-x64\bin;$env:USERPROFILE\.gem\ruby\2.5.0\bin;"
@@ -31,7 +33,7 @@ $env:path += "$base_path$dir_msys2\usr\bin"
 
 ruby.exe pacman_query.rb $enc
 
-Write-Host "`n$($dash * 107)" -ForegroundColor $fc
+Write-Host "`n$($dash * 102)" -ForegroundColor $fc
 
 foreach ($ruby in $rubies) {
   foreach ($suf in $sufs) {
@@ -52,12 +54,9 @@ foreach ($ruby in $rubies) {
     $rv = (&ruby.exe -e "puts RUBY_VERSION" | Out-String).Trim()
 
     # Finally, run Ruby Info, Ruby193 has a warning for psych
-    Write-Host "`n$($dash * 62) $dt  Ruby $rv$suf" -ForegroundColor $fc
-    if ($ruby -ne '193') {
-      ruby.exe ./appveyor_info.rb $enc
-    } else {
-      ruby.exe ./appveyor_info.rb $enc 2> $null
-    }
+    Write-Host
+    Write-Host " $dt  Ruby $rv$suf".PadLeft(102, $dash) -ForegroundColor $fc
+    ruby.exe ./appveyor_info.rb $enc
     Write-Host "`n$($dash * 102)" -ForegroundColor $fc
   }
 }
