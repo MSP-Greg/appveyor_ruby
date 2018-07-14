@@ -6,6 +6,10 @@
 require "rbconfig" unless defined? RbConfig
 
 module VersInfo
+
+  YELLOW = "\e[33;1m"
+  RESET = "\e[0m"
+
   @@col_wid = [34, 14, 17, 26, 10, 16]
 
   case ARGV[0]
@@ -78,7 +82,7 @@ module VersInfo
           "#{'Bignum::GMP_VERSION'.ljust( @@col_wid[3])}Unknown"
       end
 
-      puts "\n#{@@dash * 56} Load Test"
+      highlight "\n#{@@dash * 56} Load Test"
       loads2?('dbm'     , 'DBM'     , 'socket'        , 'Socket'         , 4)
       loads2?('digest'  , 'Digest'  , 'win32/registry', 'Win32::Registry', 4)
       loads2?('fiddle'  , 'Fiddle'  , 'win32ole'      , 'WIN32OLE'       , 4)
@@ -225,7 +229,7 @@ module VersInfo
         }
       }
 
-      puts "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
+      highlight "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
 
       max_rows = [ary_default.length || 0, ary_bundled.length || 0].max
       (0..(max_rows-1)).each { |i|
@@ -294,6 +298,10 @@ module VersInfo
       "*** FAILURE ***"
     end
 
+    def highlight(str)
+      puts "#{YELLOW}#{str}#{RESET}"
+    end
+    
   end
 end
 
