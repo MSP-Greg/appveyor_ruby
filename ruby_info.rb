@@ -41,7 +41,9 @@ module VersInfo
       puts
       first('rubygems'  , 'Gem::VERSION'  , 2)  { Gem::VERSION     }
       puts
-      first('bigdecimal', 'BigDecimal.ver', 2)  { BigDecimal.ver   }
+      first('bigdecimal', 'BigDecimal.ver', 2)  {
+        BigDecimal.const_defined?(:VERSION) ? BigDecimal::VERSION : BigDecimal.ver
+      }
       first('gdbm'      , 'GDBM::VERSION' , 2)  { GDBM::VERSION    }
       first('json/ext'  , 'JSON::VERSION' , 2)  { JSON::VERSION    }
       puts
@@ -220,7 +222,7 @@ module VersInfo
 
       ary.each { |s|
         gem_name = s[/\A[^ ]+/]
-        s.scan(/(default: |\(|, )(\d+\.\d+\.\d+[^,)]*)/) { |type, vers|
+        s.scan(/(default: |\(|, )(\d+\.\d+[^,)]*)/) { |type, vers|
           if type == 'default: '
             ary_default << [gem_name, vers]
           else
@@ -229,16 +231,16 @@ module VersInfo
         }
       }
 
-      highlight "\n#{@@dash * 18} #{"Default Gems #{@@dash * 5}".ljust(30)} #{@@dash * 18} Bundled Gems #{@@dash * 4}"
+      highlight "\n#{@@dash * 21} #{"Default Gems #{@@dash * 5}".ljust(33)} #{@@dash * 21} Bundled Gems #{@@dash * 4}"
 
       max_rows = [ary_default.length || 0, ary_bundled.length || 0].max
       (0..(max_rows-1)).each { |i|
         dflt  = ary_default[i] ? ary_default[i] : ["", ""]
         bndl  = ary_bundled[i] ? ary_bundled[i] : nil
         if bndl
-          puts "#{dflt[1].rjust(18)} #{dflt[0].ljust(30)} #{bndl[1].rjust(18)} #{bndl[0]}"
+          puts "#{dflt[1].rjust(21)} #{dflt[0].ljust(33)} #{bndl[1].rjust(21)} #{bndl[0]}"
         else
-          puts "#{dflt[1].rjust(18)} #{dflt[0]}"
+          puts "#{dflt[1].rjust(21)} #{dflt[0]}"
         end
       }
     ensure
@@ -290,10 +292,10 @@ module VersInfo
       require 'net/http'
       uri = URI.parse('https://raw.githubusercontent.com/gcc-mirror/gcc/master/config.guess')
       Net::HTTP.start(uri.host, uri.port, :use_ssl => true, :verify_mode => OpenSSL::SSL::VERIFY_PEER) { |https|
-        req = Net::HTTP::Get.new uri
+        Net::HTTP::Get.new uri
       }
       "Success"
-    rescue OpenSSL::SSL::SSLError => e
+    rescue OpenSSL::SSL::SSLError # => e
       "*** FAILURE ***"
     end
 

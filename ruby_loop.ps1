@@ -56,7 +56,7 @@ foreach ($ruby in $rubies) {
     # Finally, run Ruby Info, Ruby193 has a warning for psych
     Write-Host
     Write-Host " $dt  Ruby $rv$suf".PadLeft(102, $dash) -ForegroundColor $fc
-    ruby.exe ./appveyor_info.rb $enc
+    ruby.exe ./ruby_info.rb $enc
     Write-Host "`n$($dash * 102)" -ForegroundColor $fc
   }
 }
