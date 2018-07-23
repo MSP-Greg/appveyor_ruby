@@ -85,13 +85,13 @@ module VersInfo
       end
 
       highlight "\n#{@@dash * 5} CLI Test #{@@dash * 17}    #{@@dash * 5} Require Test #{@@dash * 39}"
-      puts chk_cli('bundler', 'bundle version', /\ABundler version \d{1,2}\.\d{1,2}\.\d{1,2}/) +
+      puts chk_cli("bundle -v", /\ABundler version (\d{1,2}\.\d{1,2}\.\d{1,2}(\.[a-z0-9]+)?)/) +
         loads2('dbm'     , 'DBM'     , 'win32/registry', 'Win32::Registry', 4)
 
-      puts chk_cli('gem', 'gem --version', /\A\d{1,2}\.\d{1,2}\.\d{1,2}/) +
+      puts chk_cli("gem --version", /\A(\d{1,2}\.\d{1,2}\.\d{1,2}(\.[a-z0-9]+)?)/) +
         loads2('digest'  , 'Digest'  , 'win32ole'      , 'WIN32OLE'       , 4)
 
-      puts chk_cli('rake', 'rake -V', /\Arake, version \d{1,2}\.\d{1,2}\.\d{1,2}/) +
+      puts chk_cli("rake -V", /\Arake, version (\d{1,2}\.\d{1,2}\.\d{1,2}(\.[a-z0-9]+)?)/) +
         loads2('fiddle'  , 'Fiddle'  , 'zlib'          , 'Zlib'           , 4)
       puts (' ' * 36) + loads1('socket' , 'Socket' , 4)
 
@@ -286,15 +286,17 @@ module VersInfo
       "*** FAILURE ***"
     end
 
-    def chk_cli(str, cmd, regex)
+    def chk_cli(cmd, regex)
+      wid = 36
+      cmd_str = cmd[/\A[^ ]+/].ljust(10)
       require 'open3'
       ret = ''.dup
       Open3.popen3(cmd) {|stdin, stdout, stderr, wait_thr|
         ret = stdout.read.strip
       }
-      "#{str.ljust(@@col_wid[4])}#{(ret[regex] && true ? 'Ok' : 'No version?').ljust(@@col_wid[3])}"
+      ret[regex] ? "#{cmd_str}Ok   #{$1}".ljust(wid) : "#{cmd_str}No version?".ljust(wid)
     rescue
-      "#{str.ljust(@@col_wid[4])}#{'Missing binstub'.ljust(@@col_wid[3])}"
+      "#{cmd_str}Missing or incorrect bin".ljust(wid)
     end
 
     def highlight(str)
