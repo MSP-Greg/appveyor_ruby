@@ -7,7 +7,7 @@ require "rbconfig" unless defined? RbConfig
 
 module VersInfo
 
-  YELLOW = "\e[33;1m"
+  YELLOW = "\e[33m"
   RESET = "\e[0m"
 
   @@col_wid = [34, 14, 17, 26, 10, 16]

@@ -5,7 +5,7 @@
 
 module Msys2Info
 
-  YELLOW = "\e[33;1m"
+  YELLOW = "\e[33m"
   RESET = "\e[0m"
 
   class << self
