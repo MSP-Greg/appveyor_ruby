@@ -48,6 +48,8 @@ module VersInfo
       first('json/ext'  , 'JSON::VERSION' , 2)  { JSON::VERSION    }
       puts
 
+      openssl_conf = ENV.delete 'OPENSSL_CONF'
+      
       if first('openssl', 'OpenSSL::VERSION', 0) { OpenSSL::VERSION }
         additional('SSL Verify'             , 0, 4) { ssl_verify }
         additional('OPENSSL_VERSION'        , 0, 4) { OpenSSL::OPENSSL_VERSION }
@@ -63,8 +65,9 @@ module VersInfo
         additional_file('Config::DEFAULT_CONFIG_FILE', 0, 4) { OpenSSL::Config::DEFAULT_CONFIG_FILE }
         puts
         additional_file("ENV['SSL_CERT_FILE']"       , 0, 4) { ENV['SSL_CERT_FILE'] }
-        additional_file("ENV['SSL_CERT_DIR']"        , 0, 4) { ENV['SSL_CERT_DIR']  }
-        additional_file("ENV['OPENSSL_CONF']"        , 0, 4) { ENV['OPENSSL_CONF']  }
+        additional_file("ENV['SSL_CERT_DIR']"        , 0, 4) { ENV['SSL_CERT_DIR' ] }
+        ENV['OPENSSL_CONF'] = openssl_conf if openssl_conf
+        additional_file("ENV['OPENSSL_CONF']"        , 0, 4) { ENV['OPENSSL_CONF' ] }
       end
       puts
 
