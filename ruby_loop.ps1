@@ -10,10 +10,12 @@ if ($env:APPVEYOR) {
   New-Variable -Name fc        -Option ReadOnly, AllScope -Scope Script -Value 'Yellow'
 
   New-Variable -Name enc       -Option AllScope -Scope Script
- 
+
 } else {
   . .\local_paths.ps1
 }
+
+Write-Host "`nimage: $env:APPVEYOR_BUILD_WORKER_IMAGE" -ForegroundColor $fc
 
 $enc = [Console]::OutputEncoding.HeaderName
 
@@ -49,7 +51,7 @@ foreach ($ruby in $rubies) {
       $env:path  = "C:\Ruby_trunk\bin;$env:USERPROFILE\.gem\ruby\2.6.0\bin;"
       $env:path += $base_path
     } else { continue }
-    
+
     $dt = $(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss UTC")
     $rv = (&ruby.exe -e "puts RUBY_VERSION" | Out-String).Trim()
 
@@ -60,6 +62,8 @@ foreach ($ruby in $rubies) {
     Write-Host "`n$($dash * 102)" -ForegroundColor $fc
   }
 }
+
+Write-Host "`nimage: $env:APPVEYOR_BUILD_WORKER_IMAGE" -ForegroundColor $fc
 
 Write-Host "`n$($dash * 8) Encoding $($dash * 8)" -ForegroundColor $fc
 Write-Host "PS Console  $enc"
