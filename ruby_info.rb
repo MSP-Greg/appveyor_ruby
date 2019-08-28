@@ -27,7 +27,7 @@ module VersInfo
       gem 'psych' if (ENV['APPVEYOR'] && RUBY_VERSION < '2.0')
 
       # Give AV build a title that means something
-      if /trunk/ =~ RUBY_DESCRIPTION && Dir.exist?('C:/Users/appveyor') && ENV['APPVEYOR']
+      if /trunk|master/ =~ RUBY_DESCRIPTION && Dir.exist?('C:/Users/appveyor') && ENV['APPVEYOR']
         title = "#{Time.now.utc.strftime('%F %R UTC')}   #{RUBY_DESCRIPTION[/\([^\)]+\)/]}"
         `appveyor UpdateBuild -Message \"#{title}\"`
       end
