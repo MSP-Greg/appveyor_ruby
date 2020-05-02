@@ -22,7 +22,7 @@ $enc = [Console]::OutputEncoding.HeaderName
 New-Variable -Name dash -Option ReadOnly, AllScope -Scope Script -Value "$([char]0x2015)"
 
 [string[]]$sufs = '', '-x64'
-[string[]]$rubies  = '193', '200', '21', '22', '23', '24', '25', '26', '_trunk'
+[string[]]$rubies  = '193', '200', '21', '22', '23', '24', '25', '26', '27', '_trunk'
 
 $dt = $(Get-Date).ToUniversalTime().ToString("yyyy-MM-dd HH:mm:ss UTC")
 
